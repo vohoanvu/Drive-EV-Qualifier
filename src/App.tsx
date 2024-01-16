@@ -1,6 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import FormComponent from './components/FormComponent';
+import ResultComponent from './components/ResultComponent';
 
 function App() {
   return (
@@ -19,6 +22,12 @@ function App() {
           Learn React
         </a>
       </header>
+      <Router>
+        <Switch>
+          <Route path="/" exact component={FormComponent} />
+          <Route path="/result" component={ResultComponent} />
+        </Switch>
+      </Router>
     </div>
   );
 }
