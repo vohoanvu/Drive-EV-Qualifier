@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import FormComponent from './components/FormComponent';
+import FormComponent from './components/EligibilityFormComponent';
 import ResultComponent from './components/ResultComponent';
 
 function App() {

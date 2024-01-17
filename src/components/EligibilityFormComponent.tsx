@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { DriveEVRebateEligibilityForm } from '../typings/types';
 import { DealerTypes, EligibleVehicleTypes } from '../typings/constanst';
 
-const FormComponent: React.FC = () => 
+const EligibilityFormComponent: React.FC = () => 
 {
     const [formState, setFormState] = useState<DriveEVRebateEligibilityForm>({
-        vehicleType: EligibleVehicleTypes.BEV,
+        vehicleType: '',
         purchaseOrLeaseDate: new Date(),
         vehiclePrice: 0,
-        dealerType: DealerTypes.RI_Dealer,
+        dealerType: '',
         isRhodeIslandResident: false,
         isVehicleRegisteredInRI: false,
         income: 0,
@@ -23,13 +23,23 @@ const FormComponent: React.FC = () =>
         console.log(formData);
     }
 
+    const vehicleOptions = [
+        { value: '', label: 'Select Vehicle Type' },
+        { value: EligibleVehicleTypes.BEV, label: EligibleVehicleTypes.BEV },
+        { value: EligibleVehicleTypes.FCEV, label: EligibleVehicleTypes.FCEV },
+        { value: EligibleVehicleTypes.PHEV, label: EligibleVehicleTypes.PHEV },
+    ];
+    
+    const dealerOptions = [
+        { value: '', label: 'Select EV Dealer Type' },
+        { value: DealerTypes.RI_Dealer, label: 'Rhode Island Dealer' },
+        { value: DealerTypes.OOS_Dealer, label: 'Out-Of-State Dealer' },
+    ];
+
     return (
         <div>
             <h1>Drive EV Rebate Eligibility Form For Rhode Island residents</h1>
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                if (formState) CheckEligibilityHandler(formState);
-            }}>
+            <form onSubmit={(e) => { e.preventDefault(); if (formState) CheckEligibilityHandler(formState); }}>
                 <div className='label-form-align'>
                     <label htmlFor="vehicleType">What is your vehicle type?</label>
                     <select
@@ -79,6 +89,7 @@ const FormComponent: React.FC = () =>
                             ...formState, 
                             dealerType: e.target.value as DealerTypes
                         })}>
+                        <option value="">Select EV Dealer Type</option>
                         <option value="RI_Dealer">Rhode Island Dealer</option>
                         <option value="OOS_Dealer">Out-Of-State Dealer</option>
                     </select>
@@ -124,4 +135,4 @@ const FormComponent: React.FC = () =>
     );
 };
 
-export default FormComponent;
+export default EligibilityFormComponent;

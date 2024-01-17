@@ -1,10 +1,8 @@
-import { DealerTypes, EligibleVehicleTypes } from "./constanst";
-
 export interface DriveEVRebateEligibilityForm {
-    vehicleType: EligibleVehicleTypes;
+    vehicleType: string;
     purchaseOrLeaseDate: Date;
     vehiclePrice: number; // Agreed-upon value of the vehicle, before taxes and fees
-    dealerType: DealerTypes; // RI = Rhode Island, OOS = Out-Of-State
+    dealerType: string; // RI = Rhode Island, OOS = Out-Of-State
     isRhodeIslandResident: boolean; // Rhode Island residency confirmation
     isVehicleRegisteredInRI: boolean; // Vehicle registration in Rhode Island confirmation
     income: number; // Applicant's income

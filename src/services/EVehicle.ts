@@ -27,12 +27,12 @@ export class EVehicle
     isVehicleRegisteredInRI: boolean;
   
     constructor(form: DriveEVRebateEligibilityForm) {
-        this.eVehicleType = form.vehicleType;
+        this.eVehicleType = this.ParseEnum(EligibleVehicleTypes, form.vehicleType);
         this.price = form.vehiclePrice;
         this.isNew = !form.isUsed;
         this.purchaseDate = form.purchaseOrLeaseDate;
         this.isConversion = form.isConversion;
-        this.dealerType = form.dealerType;
+        this.dealerType = this.ParseEnum(DealerTypes ,form.dealerType);
         this.OosDealerName = form.OosDealerName;
         this.isLease = form.isLease;
         this.leaseTermInMonths = form.isLease ? form.leaseTermInMonths : undefined;
@@ -107,5 +107,9 @@ export class EVehicle
         }
 
         return 0;
+    }
+
+    ParseEnum<T>(enumType: T, value: string): T[keyof T] {
+        return enumType[value as keyof T];
     }
 }  
