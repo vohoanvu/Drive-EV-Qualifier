@@ -1,7 +1,7 @@
 {
   "name": "drive-ev-qualifier",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -50,5 +50,5 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/eslint": "^8.56.2"
   },
-  "homepage": "https://vohoanvu.github.io/drive-ev-qualifier"
+  "homepage": "https://vohoanvu.github.io/drive-ev-qualifier/"
 }
