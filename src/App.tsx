@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import EligibilityFormComponent from './components/EligibilityFormComponent';
 import ResultComponent from './components/ResultComponent';
 
