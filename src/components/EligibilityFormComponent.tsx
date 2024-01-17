@@ -192,7 +192,7 @@ const EligibilityFormComponent: React.FC<EligibilityFormComponentProps> = ({ set
                         cursor: 'pointer',
                     }}>
                     Check Your Eligibility
-                    </button>
+                </button>
             </form>
         </div>
     );

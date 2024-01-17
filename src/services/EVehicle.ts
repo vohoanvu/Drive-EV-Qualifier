@@ -82,11 +82,11 @@ export class EVehicle
 
     // Overall eligibility check
     isEligibleForDriveEV(): boolean {
-        // console.log('isPriceEligible? ', this.isPriceEligible());
-        // console.log('isLeasedVehicleEligible? ', this.isLeasedVehicleEligible());
-        // console.log('isPurchaseDateEligible? ', this.isPurchaseDateEligible());
-        // console.log('isRholeIslandStatusEligible? ', this.isRholeIslandStatusEligible());
-        // console.log('isApplicationDeadlineEligible? ', this.isApplicationDeadlineEligible());
+        //DEBUG: console.log('isPriceEligible? ', this.isPriceEligible());
+        //DEBUG: console.log('isLeasedVehicleEligible? ', this.isLeasedVehicleEligible());
+        //DEBUG: console.log('isPurchaseDateEligible? ', this.isPurchaseDateEligible());
+        //DEBUG: console.log('isRholeIslandStatusEligible? ', this.isRholeIslandStatusEligible());
+        //DEBUG: console.log('isApplicationDeadlineEligible? ', this.isApplicationDeadlineEligible());
 
         return this.isPriceEligible() 
             && this.isLeasedVehicleEligible() 
