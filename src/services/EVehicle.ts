@@ -27,12 +27,12 @@ export class EVehicle
     isVehicleRegisteredInRI: boolean;
   
     constructor(form: DriveEVRebateEligibilityForm) {
-        this.eVehicleType = this.ParseEnum(EligibleVehicleTypes, form.vehicleType);
+        this.eVehicleType = this.parseStringToEnumValue(EligibleVehicleTypes, form.vehicleType);
         this.price = form.vehiclePrice;
         this.isNew = !form.isUsed;
         this.purchaseDate = form.purchaseOrLeaseDate;
         this.isConversion = form.isConversion;
-        this.dealerType = this.ParseEnum(DealerTypes ,form.dealerType);
+        this.dealerType = this.parseStringToEnumValue(DealerTypes ,form.dealerType);
         this.OosDealerName = form.OosDealerName;
         this.isLease = form.isLease;
         this.leaseTermInMonths = form.isLease ? form.leaseTermInMonths : undefined;
@@ -49,10 +49,10 @@ export class EVehicle
     }
 
     isLeasedVehicleEligible(): boolean {
-        if (this.isLease && this.leaseTermInMonths) {
-            return this.leaseTermInMonths >= minimumLeaseTermInMonths;
+        if (this.isLease) {
+            return this.leaseTermInMonths !== undefined && this.leaseTermInMonths <= minimumLeaseTermInMonths;
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -82,6 +82,12 @@ export class EVehicle
 
     // Overall eligibility check
     isEligibleForDriveEV(): boolean {
+        // console.log('isPriceEligible? ', this.isPriceEligible());
+        // console.log('isLeasedVehicleEligible? ', this.isLeasedVehicleEligible());
+        // console.log('isPurchaseDateEligible? ', this.isPurchaseDateEligible());
+        // console.log('isRholeIslandStatusEligible? ', this.isRholeIslandStatusEligible());
+        // console.log('isApplicationDeadlineEligible? ', this.isApplicationDeadlineEligible());
+
         return this.isPriceEligible() 
             && this.isLeasedVehicleEligible() 
             && this.isPurchaseDateEligible()
@@ -90,7 +96,9 @@ export class EVehicle
     }
 
     getRebateAmount(): number {
-        if (this.isNew && (this.eVehicleType === EligibleVehicleTypes.BEV || this.eVehicleType === EligibleVehicleTypes.FCEV)) {
+        if (this.isNew && 
+            (this.eVehicleType === EligibleVehicleTypes.BEV 
+                || this.eVehicleType === EligibleVehicleTypes.FCEV)) {
             return newBev_FcevReward;
         }
 
@@ -109,7 +117,16 @@ export class EVehicle
         return 0;
     }
 
-    ParseEnum<T>(enumType: T, value: string): T[keyof T] {
-        return enumType[value as keyof T];
+    private parseStringToEnumValue<T extends Record<string, unknown>>(enumType: T, value: string): T[keyof T] {
+        let result;
+        Object.keys(enumType).forEach((key) => {
+            if (enumType[key as keyof T] === value) {
+                result = enumType[key as keyof T];
+            }
+        });
+        if (result === undefined) {
+            throw new Error(`Invalid enum value: ${value}`);
+        }
+        return result;
     }
 }  

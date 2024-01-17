@@ -3,6 +3,7 @@ import { DriveEVRebateEligibilityForm } from '../typings/types';
 import { DealerTypes, EligibleVehicleTypes } from '../typings/constanst';
 import { FormSelect, FormInput, FormCheckbox, FormDoubleCheckbox  } from './FormInput';
 import { LeaseTermForm, OOSDealerNameForm } from './OptionalForm';
+import { EVehicle } from '../services/EVehicle';
 
 const EligibilityFormComponent: React.FC = () => 
 {
@@ -21,9 +22,22 @@ const EligibilityFormComponent: React.FC = () =>
         leaseTermInMonths: 0,
     });
 
-    function CheckEligibilityHandler(formData: DriveEVRebateEligibilityForm) {
-        console.log('EV Drive Eligibility: ', formData);
-    }
+    const CheckEligibilityHandler = (formData: DriveEVRebateEligibilityForm) => {
+        // Step 1: Instantiate a new EVehicle object
+        const eVehicle = new EVehicle(formData);
+        console.log('form data: ', formData);
+        // Step 2: Validate data and determine eligibility
+        const isEligible = eVehicle.isEligibleForDriveEV();
+      
+        // Step 3: Calculate the rebate amount
+        const rebateAmount = eVehicle.getRebateAmount();
+      
+        // Logging the results (or handle them as needed)
+        console.log('EV Drive Eligibility: ', isEligible);
+        console.log('Rebate Amount: ', rebateAmount);
+      
+        // Additional handling can be done here (e.g., displaying results to the user)
+    };
 
     const vehicleOptions = [
         { value: '', label: 'Select Vehicle Type' },
@@ -82,7 +96,7 @@ const EligibilityFormComponent: React.FC = () =>
                 />
                 {formState?.isLease && (
                     <LeaseTermForm
-                        leaseTermInMonths={formState?.leaseTermInMonths ?? 0}
+                        leaseTermInMonths={formState.leaseTermInMonths ?? 0}
                         onChange={(e) => 
                             setFormState({ 
                                 ...formState, 
@@ -148,7 +162,7 @@ const EligibilityFormComponent: React.FC = () =>
                     id="income"
                     label="Your annual income"
                     type="number"
-                    value={formState?.income}
+                    value={formState?.income ?? 0}
                     onChange={(e) => setFormState({ ...formState, income: Number(e.target.value) })}
                 />
                 <button type="submit">Check Your Eligibility</button>

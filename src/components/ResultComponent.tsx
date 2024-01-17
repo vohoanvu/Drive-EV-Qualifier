@@ -5,7 +5,7 @@ const ResultComponent: React.FC = () =>
     return (
         <div>
             <h1>Rebate Component</h1>
-            {/* Display rebate calculation results here */}
+            {/* Display Eligibility check and rebate calculation results here */}
         </div>
     );
 }
