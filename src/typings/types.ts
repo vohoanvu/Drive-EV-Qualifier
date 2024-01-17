@@ -30,6 +30,7 @@ export const OOSQualifyingDealerships = new Map<string, string>([
     ["Putnam Kia", "157 Providence Pike, Rt, 44, Putnam, CT 06260"],
     ["Marlboro Nissan", "740 Boston Post Rd E, Marlborough, MA 01752"],
     ["1A Auto Sales", "1449 Main St, Walpole, MA 02081"],
-    ["Bristol Toyota", "2283 Grand Army of the Republic Hwy, Swansea, MA 02777"]
+    ["Bristol Toyota", "2283 Grand Army of the Republic Hwy, Swansea, MA 02777"],
+    ["Others", "Other dealerships not listed above need to be approved by the Rhode Island Office of Energy Resources."]
 ]);
   
