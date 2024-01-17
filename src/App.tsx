@@ -16,13 +16,13 @@ function App() {
       <header className="App-header">
         <Router>
           <Routes>
-            <Route 
+            <Route
               path="/" 
               element={
                 <EligibilityFormComponent setEligibilityResult={setEligibilityResult} />
               } 
             />
-            <Route 
+            <Route
               path="/result" 
               element={<ResultComponent {...eligibilityResult} />} 
             />
