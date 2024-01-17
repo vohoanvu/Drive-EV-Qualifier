@@ -4,9 +4,20 @@ import { DealerTypes, EligibleVehicleTypes } from '../typings/constanst';
 import { FormSelect, FormInput, FormCheckbox, FormDoubleCheckbox  } from './FormInput';
 import { LeaseTermForm, OOSDealerNameForm } from './OptionalForm';
 import { EVehicle } from '../services/EVehicle';
+import { useNavigate } from 'react-router-dom';
 
-const EligibilityFormComponent: React.FC = () => 
+type EligibilityFormComponentProps = {
+    setEligibilityResult: React.Dispatch<React.SetStateAction<{
+        isEligible: boolean;
+        message: string;
+        rebateAmount: number;
+    }>>
+};
+
+const EligibilityFormComponent: React.FC<EligibilityFormComponentProps> = ({ setEligibilityResult }) =>
 {
+    const navigate = useNavigate();
+
     const [formState, setFormState] = useState<DriveEVRebateEligibilityForm>({
         vehicleType: '',
         purchaseOrLeaseDate: new Date(),
@@ -36,7 +47,15 @@ const EligibilityFormComponent: React.FC = () =>
         console.log('EV Drive Eligibility: ', isEligible);
         console.log('Rebate Amount: ', rebateAmount);
       
-        // Additional handling can be done here (e.g., displaying results to the user)
+        // Set the eligibility result
+        setEligibilityResult({
+            isEligible: isEligible,
+            message: isEligible ? "Congratulations! You are eligible for the Drive EV program!" : "Sorry, you are not eligible!",
+            rebateAmount: rebateAmount
+        });
+
+        // Navigate to the results page
+        navigate('/result');
     };
 
     const vehicleOptions = [
@@ -165,7 +184,15 @@ const EligibilityFormComponent: React.FC = () =>
                     value={formState?.income ?? 0}
                     onChange={(e) => setFormState({ ...formState, income: Number(e.target.value) })}
                 />
-                <button type="submit">Check Your Eligibility</button>
+                <button 
+                    type="submit" 
+                    style={{
+                        padding: '15px 30px',
+                        fontSize: '20px',
+                        cursor: 'pointer',
+                    }}>
+                    Check Your Eligibility
+                    </button>
             </form>
         </div>
     );

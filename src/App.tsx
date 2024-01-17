@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import FormComponent from './components/EligibilityFormComponent';
+import EligibilityFormComponent from './components/EligibilityFormComponent';
 import ResultComponent from './components/ResultComponent';
 
 function App() {
+  const [eligibilityResult, setEligibilityResult] = useState({
+    isEligible: false,
+    message: '',
+    rebateAmount: 0
+  });
+
   return (
     <div className="App">
       <header className="App-header">
         <Router>
           <Routes>
-            <Route path="/" element={<FormComponent/>} />
-            <Route path="/result" element={<ResultComponent/>} />
+            <Route 
+              path="/" 
+              element={
+                <EligibilityFormComponent setEligibilityResult={setEligibilityResult} />
+              } 
+            />
+            <Route 
+              path="/result" 
+              element={<ResultComponent {...eligibilityResult} />} 
+            />
           </Routes>
         </Router>
       </header>

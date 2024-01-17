@@ -1,13 +1,39 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const ResultComponent: React.FC = () => 
-{
-    return (
-        <div>
-            <h1>Rebate Component</h1>
-            {/* Display Eligibility check and rebate calculation results here */}
-        </div>
-    );
+interface ResultComponentProps {
+    isEligible: boolean;
+    message: string;
+    rebateAmount: number;
 }
 
-export default ResultComponent;
+const ResultComponent: React.FC<ResultComponentProps> = ({ 
+    isEligible, 
+    message, 
+    rebateAmount 
+}) => 
+{
+    const navigate = useNavigate();
+
+    // Function to handle back button click
+    const handleBackClick = () => {
+        navigate('/');
+    };
+
+
+    return (
+      <div>
+        <h1>Rebate Component</h1>
+        <p>{message}</p>
+        {isEligible && (
+            <p>You are eligible for a rebate of ${rebateAmount.toFixed(2)}</p>
+        )}
+        {!isEligible && (
+            <p>Unfortunately, you are not eligible for a rebate.</p>
+        )}
+        <button onClick={handleBackClick}>Back to Form</button> {/* Back button */}
+      </div>
+    );
+};
+  
+  export default ResultComponent;
