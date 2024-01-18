@@ -15,6 +15,8 @@ export const applicationSubmissionDeadlineInDays = 120;
 
 export const applicationFrequencyLimitInMonths = 48; //4 years from last approval until reapply
 
+export const minimumAnnualIncome = 33645;
+
 
 export enum IneligibleVehicleTypes {
     AftermarketConversion = 'Aftermarket Conversion',

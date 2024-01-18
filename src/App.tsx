@@ -8,7 +8,7 @@ function App() {
   const [eligibilityResult, setEligibilityResult] = useState({
     isEligible: false,
     message: '',
-    rebateAmount: 0
+    rebateAmount: 0,
   });
 
   return (

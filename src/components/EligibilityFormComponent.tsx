@@ -11,6 +11,7 @@ type EligibilityFormComponentProps = {
         isEligible: boolean;
         message: string;
         rebateAmount: number;
+        failReasons?: string[];
     }>>
 };
 
@@ -19,12 +20,12 @@ const EligibilityFormComponent: React.FC<EligibilityFormComponentProps> = ({ set
     const navigate = useNavigate();
 
     const [formState, setFormState] = useState<DriveEVRebateEligibilityForm>({
-        vehicleType: '',
+        vehicleType: EligibleVehicleTypes.BEV.toString(),
         purchaseOrLeaseDate: new Date(),
         vehiclePrice: 0,
-        dealerType: '',
-        isRhodeIslandResident: false,
-        isVehicleRegisteredInRI: false,
+        dealerType: DealerTypes.RI_Dealer.toString(),
+        isRhodeIslandResident: true,
+        isVehicleRegisteredInRI: true,
         income: 0,
         isLease: false,
         isUsed: false,
@@ -39,34 +40,40 @@ const EligibilityFormComponent: React.FC<EligibilityFormComponentProps> = ({ set
         console.log('form data: ', formData);
         // Step 2: Validate data and determine eligibility
         const isEligible = eVehicle.isEligibleForDriveEV();
-      
-        // Step 3: Calculate the rebate amount
-        const rebateAmount = eVehicle.getRebateAmount();
-      
-        // Logging the results (or handle them as needed)
-        console.log('EV Drive Eligibility: ', isEligible);
-        console.log('Rebate Amount: ', rebateAmount);
-      
-        // Set the eligibility result
-        setEligibilityResult({
-            isEligible: isEligible,
-            message: isEligible ? "Congratulations! You are eligible for the Drive EV program!" : "Sorry, you are not eligible!",
-            rebateAmount: rebateAmount
-        });
 
-        // Navigate to the results page
+        let failReasons: string[] = [];
+        const rebateAmount = eVehicle.getRebateAmount();
+        const isDrivePlusEligible = eVehicle.isDrivePlusEligible();
+
+        if (isEligible) {
+            setEligibilityResult({
+                isEligible: true,
+                message: isDrivePlusEligible ? 
+                    "Congratulations! You are both eligible for the Drive EV and Drive Plus programs!" :
+                    "Congratulations! You are eligible for the Drive EV program!",
+                rebateAmount: rebateAmount,
+            });
+        } else {
+            failReasons = eVehicle.getFailReasons();
+            
+            setEligibilityResult({
+                isEligible: false,
+                message: "Sorry, you are not eligible!",
+                rebateAmount: rebateAmount,
+                failReasons: failReasons,
+            });
+        }
+
         navigate('/result');
     };
 
     const vehicleOptions = [
-        { value: '', label: 'Select Vehicle Type' },
         { value: EligibleVehicleTypes.BEV, label: EligibleVehicleTypes.BEV },
         { value: EligibleVehicleTypes.FCEV, label: EligibleVehicleTypes.FCEV },
         { value: EligibleVehicleTypes.PHEV, label: EligibleVehicleTypes.PHEV },
     ];
     
     const dealerOptions = [
-        { value: '', label: 'Select EV Dealer Type' },
         { value: DealerTypes.RI_Dealer, label: 'Rhode Island Dealer' },
         { value: DealerTypes.OOS_Dealer, label: 'Out-Of-State Dealer' },
     ];
@@ -161,25 +168,29 @@ const EligibilityFormComponent: React.FC<EligibilityFormComponentProps> = ({ set
 
                 <FormCheckbox
                     id="isRhodeIslandResident"
-                    label="Are you a Rhode Island Resident?"
+                    label="Are you a Rhode Island Resident? (Check if yes, otherwise leave blank)"
                     checked={formState?.isRhodeIslandResident}
                     onChange={(e) => setFormState({ ...formState, isRhodeIslandResident: e.target.checked })}
                 />
-                <FormCheckbox
-                    id="isVehicleRegisteredInRI"
-                    label="Is your vehicle registered in Rhode Island?"
-                    checked={formState?.isVehicleRegisteredInRI}
-                    onChange={(e) => setFormState({ ...formState, isVehicleRegisteredInRI: e.target.checked })}
-                />
+                {
+                    formState?.dealerType === DealerTypes.OOS_Dealer && (
+                        <FormCheckbox
+                            id="isVehicleRegisteredInRI"
+                            label="Is your vehicle registered in Rhode Island? (Check if yes, otherwise leave blank)"
+                            checked={formState?.isVehicleRegisteredInRI}
+                            onChange={(e) => setFormState({ ...formState, isVehicleRegisteredInRI: e.target.checked })}
+                        />
+                    )
+                }
                 <FormCheckbox
                     id="isConversion"
-                    label="Have you converted your vehicle to an electric vehicle as aftermarket conversion? (check if yes, otherwise leave blank!)"
+                    label="Have you converted your vehicle to an electric vehicle as aftermarket conversion? (check if yes, otherwise leave blank)"
                     checked={formState?.isConversion}
                     onChange={(e) => setFormState({ ...formState, isConversion: e.target.checked })}
                 />
                 <FormInput
                     id="income"
-                    label="Your annual income"
+                    label="Your Annual Income in $"
                     type="number"
                     value={formState?.income ?? 0}
                     onChange={(e) => setFormState({ ...formState, income: Number(e.target.value) })}

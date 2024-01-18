@@ -2,6 +2,7 @@ import {
     DealerTypes,
     EligibleVehicleTypes,
     minPurchaseOrLeaseDate,
+    minimumAnnualIncome,
     minimumLeaseTermInMonths,
     newBev_FcevReward,
     newEvPriceCap, 
@@ -25,6 +26,7 @@ export class EVehicle
     leaseTermInMonths?: number;
     isRhodeIslandResident: boolean;
     isVehicleRegisteredInRI: boolean;
+    ownerAnnualIncome: number;
   
     constructor(form: DriveEVRebateEligibilityForm) {
         this.eVehicleType = this.parseStringToEnumValue(EligibleVehicleTypes, form.vehicleType);
@@ -38,6 +40,11 @@ export class EVehicle
         this.leaseTermInMonths = form.isLease ? form.leaseTermInMonths : undefined;
         this.isRhodeIslandResident = form.isRhodeIslandResident;
         this.isVehicleRegisteredInRI = form.isVehicleRegisteredInRI;
+        this.ownerAnnualIncome = form.income;
+    }
+
+    isDrivePlusEligible(): boolean {
+        return this.isEligibleForDriveEV() && this.ownerAnnualIncome <= minimumAnnualIncome;
     }
 
     isPriceEligible(): boolean {
@@ -82,17 +89,50 @@ export class EVehicle
 
     // Overall eligibility check
     isEligibleForDriveEV(): boolean {
-        //DEBUG: console.log('isPriceEligible? ', this.isPriceEligible());
-        //DEBUG: console.log('isLeasedVehicleEligible? ', this.isLeasedVehicleEligible());
-        //DEBUG: console.log('isPurchaseDateEligible? ', this.isPurchaseDateEligible());
-        //DEBUG: console.log('isRholeIslandStatusEligible? ', this.isRholeIslandStatusEligible());
-        //DEBUG: console.log('isApplicationDeadlineEligible? ', this.isApplicationDeadlineEligible());
+        console.log('isPriceEligible? ', this.isPriceEligible());
+        console.log('isLeasedVehicleEligible? ', this.isLeasedVehicleEligible());
+        console.log('isPurchaseDateEligible? ', this.isPurchaseDateEligible());
+        console.log('isRholeIslandStatusEligible? ', this.isRholeIslandStatusEligible());
+        console.log('isApplicationDeadlineEligible? ', this.isApplicationDeadlineEligible());
+        console.log('isDealerEligible? ', this.isDealerEligible());
+        console.log('isConversion? ', this.isConversion);
 
         return this.isPriceEligible() 
             && this.isLeasedVehicleEligible() 
             && this.isPurchaseDateEligible()
             && this.isRholeIslandStatusEligible()
-            && this.isApplicationDeadlineEligible()
+            && !this.isConversion 
+            && this.isDealerEligible()
+    }
+
+    getFailReasons(): string[] {
+        const failReasons: string[] = [];
+
+        if (!this.isPriceEligible()) {
+            failReasons.push('Purchase Price is not eligible');
+        }
+
+        if (!this.isLeasedVehicleEligible()) {
+            failReasons.push('Leased vehicle is not eligible');
+        }
+
+        if (!this.isPurchaseDateEligible()) {
+            failReasons.push('Purchase Date is not eligible');
+        }
+
+        if (!this.isRholeIslandStatusEligible()) {
+            failReasons.push('Rhode Island status is not eligible');
+        }
+
+        if (this.isConversion) {
+            failReasons.push('Converted vehicles are not eligible');
+        }
+
+        if (!this.isDealerEligible()) {
+            failReasons.push('Dealer is not eligible');
+        }
+
+        return failReasons;
     }
 
     getRebateAmount(): number {

@@ -5,12 +5,14 @@ interface ResultComponentProps {
     isEligible: boolean;
     message: string;
     rebateAmount: number;
+    failReasons?: string[];
 }
 
 const ResultComponent: React.FC<ResultComponentProps> = ({ 
     isEligible, 
     message, 
-    rebateAmount 
+    rebateAmount,
+    failReasons
 }) => 
 {
     const navigate = useNavigate();
@@ -25,12 +27,21 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
       <div>
         <h1>Rebate Component</h1>
         <p>{message}</p>
-        {isEligible && (
-            <p>You are eligible for a rebate of ${rebateAmount.toFixed(2)}</p>
-        )}
-        {!isEligible && (
-            <p>Unfortunately, you are not eligible for a rebate.</p>
-        )}
+        {
+            isEligible ? (
+                <p>You are eligible for a rebate amount of ${rebateAmount.toFixed(2)}</p>
+            ) : (
+                <>
+                    <p>Unfortunately, you are not eligible for a rebate based on the following reasons:</p>
+                    <br/>
+                    <ul>
+                        {failReasons?.map((reason, index) => (
+                            <li key={index}>{reason}</li>
+                        ))}
+                    </ul>
+                </>
+            )
+        }
         <button onClick={handleBackClick}>Back to Form</button> {/* Back button */}
       </div>
     );
