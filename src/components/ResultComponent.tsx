@@ -25,7 +25,7 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
 
     return (
       <div>
-        <h1>Rebate Component</h1>
+        <h1>Rhodes Island Drive EV Results</h1>
         <p>{message}</p>
         {
             isEligible ? (
