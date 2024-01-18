@@ -14,13 +14,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Router basename={process.env.PUBLIC_URL}>
+        <Router>
           <Routes>
             <Route
               path="/" 
               element={
                 <EligibilityFormComponent setEligibilityResult={setEligibilityResult} />
-              } 
+              }
             />
             <Route
               path="/result" 
