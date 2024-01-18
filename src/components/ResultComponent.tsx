@@ -47,4 +47,4 @@ const ResultComponent: React.FC<ResultComponentProps> = ({
     );
 };
   
-  export default ResultComponent;
+export default ResultComponent;
